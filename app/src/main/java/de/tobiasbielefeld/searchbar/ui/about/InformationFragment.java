@@ -47,11 +47,8 @@ public class InformationFragment extends FragmentWithBottomSpacing {
         TextView textViewBuildDate = view.findViewById(R.id.aboutTextViewBuild);                     //build date
         TextView textViewAppVersion = view.findViewById(R.id.aboutTextViewVersion);                  //app version
         TextView textViewGitHubLink = view.findViewById(R.id.aboutTextViewGitHubLink);               //link for the gitHub repo
+        TextView textViewOriginalGitHubLink = view.findViewById(R.id.aboutTextViewOriginalGitHubLink);
         TextView textViewLicenseLink = view.findViewById(R.id.aboutTextViewLicenseLink);
-        TextView textFrenchContributors = view.findViewById(R.id.about_french_contributors);
-        TextView textFurtherContributors1 = view.findViewById(R.id.about_further_contributors_1);
-        TextView textFurtherContributors2 = view.findViewById(R.id.about_further_contributors_2);
-        TextView textFurtherContributors3 = view.findViewById(R.id.about_further_contributors_3);
 
         String buildDate = DateFormat.getDateInstance().format(BuildConfig.TIMESTAMP);                          //get the build date in locale time format
 
@@ -60,9 +57,7 @@ public class InformationFragment extends FragmentWithBottomSpacing {
         textViewBuildDate.setText(stringFormat(buildDate));
 
         //enable the hyperlink clicks
-        TextView[] textViews = new TextView[]{textViewGitHubLink,textViewLicenseLink,
-                textFrenchContributors, textFurtherContributors1, textFurtherContributors2, textFurtherContributors3
-        };
+        TextView[] textViews = new TextView[]{textViewGitHubLink, textViewOriginalGitHubLink, textViewLicenseLink};
 
         for (TextView textView : textViews){
             textView.setMovementMethod(LinkMovementMethod.getInstance());

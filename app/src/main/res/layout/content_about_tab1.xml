@@ -34,10 +34,11 @@
                     android:paddingBottom="6dp">
 
                     <TextView
-                        android:layout_width="218dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawableLeft="@mipmap/ic_launcher"
-                        android:gravity="center"
+                        android:drawablePadding="8dp"
+                        android:gravity="center_vertical"
                         android:text="@string/app_name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textStyle="bold" />
@@ -171,22 +172,18 @@
                 android:orientation="vertical"
                 android:padding="6dp">
 
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="@string/about_translations"
-
+                    android:text="@string/about_based_on"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textStyle="bold" />
-
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:background="@android:color/darker_gray" />
-
 
                 <TableLayout
                     android:layout_width="wrap_content"
@@ -201,91 +198,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="7dp"
-                            android:text="@string/settings_language_french"
+                            android:text="@string/about_source_code"
                             android:textColor="?android:attr/textColorPrimary" />
 
                         <TextView
-                            android:id="@+id/about_french_contributors"
+                            android:id="@+id/aboutTextViewOriginalGitHubLink"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:padding="7dp"
-                            android:text="@string/contributors_benjamin_tourrel" />
-
+                            android:text="@string/about_original_github_link" />
                     </TableRow>
 
                 </TableLayout>
 
             </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            card_view:cardCornerRadius="2dp"
-            card_view:cardUseCompatPadding="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="@string/about_further_contributors"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textStyle="bold" />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:background="@android:color/darker_gray" />
-
-
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/about_further_contributors_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="7dp"
-                            android:text="@string/contributors_julfers" />
-
-                        <TextView
-                            android:id="@+id/about_further_contributors_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="7dp"
-                            android:text="@string/contributors_tedkotz" />
-
-
-                        <TextView
-                            android:id="@+id/about_further_contributors_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="7dp"
-                            android:text="@string/contributors_good_good_create" />
-
-                    </TableRow>
-
-                </TableLayout>
-
-            </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
         <View

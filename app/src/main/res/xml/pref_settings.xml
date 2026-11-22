@@ -144,6 +144,29 @@
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:singleLineTitle="false"
+        app:title="@string/settings_voice_models_title">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false"
+            app:selectable="false"
+            app:key="pref_key_voice_model_speech"
+            app:title="@string/settings_voice_model_speech_title"
+            app:summary="@string/settings_voice_model_speech_summary" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false"
+            app:selectable="false"
+            app:key="pref_key_voice_model_vad"
+            app:title="@string/settings_voice_model_vad_title"
+            app:summary="@string/settings_voice_model_vad_summary" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:singleLineTitle="false"
         app:title="@string/settings_export_category_title">
 
         <Preference

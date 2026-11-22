@@ -51,7 +51,7 @@ public abstract class CustomAppCompatActivity extends AppCompatActivity {
         lastKnownLocale = Locale.getDefault();
 
         lastKnownTheme = getSavedTheme();
-        changeTheme(lastKnownTheme);
+        changeTheme(2);
 
         lastKnownOrientation = getSavedOrientation();
         setOrientation(lastKnownOrientation);
@@ -95,11 +95,8 @@ public abstract class CustomAppCompatActivity extends AppCompatActivity {
     }
 
     public void changeTheme(int theme) {
-        switch (theme) {
-            case 0 -> getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            case 1 -> getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            case 2 -> getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
+        // Voice builds stay AMOLED black even if the system or a saved setting is light.
+        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }
 
     public void setOrientation(int orientation) {
@@ -113,6 +110,10 @@ public abstract class CustomAppCompatActivity extends AppCompatActivity {
 
     public void changeToolbarColor() {
         int savedColor = getSavedToolbarColor();
+        if (savedColor == 0xFF3F51B5 || savedColor == 0xFF32408B) {
+            savedColor = DEFAULT_TOOLBAR_COLOR;
+            putSavedToolbarColor(savedColor);
+        }
 
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

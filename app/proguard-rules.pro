@@ -21,3 +21,7 @@
 
 # keep export / import models
 -keep class de.tobiasbielefeld.searchbar.models.export.** { *; }
+
+# sherpa-onnx reads these fields from JNI. Renaming or stripping them breaks transcription.
+-keep class com.k2fsa.sherpa.onnx.** { *; }
+-keepclassmembers class com.k2fsa.sherpa.onnx.** { *; }

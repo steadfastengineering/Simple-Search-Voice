@@ -14,6 +14,11 @@
     <string name="search_hint">Search for…</string>
     <string name="setup_search_in_settings">Setup a valid search url for this entry in the settings first</string>
     <string name="load_search_engine_list">Search engines are not loaded yet</string>
+    <string name="voice_search">Voice search</string>
+    <string name="voice_listening">Listening…</string>
+    <string name="voice_permission_denied">Microphone permission is required for voice search</string>
+    <string name="voice_no_speech">Didn’t catch that</string>
+    <string name="voice_failed">Voice search failed</string>
 
     <!-- Dialogs -->
     <string name="dialog_delete_entry_title">Delete this record?</string>
@@ -80,6 +85,12 @@
     <string name="setting_start_on_quick_search_select_title">"Instant search for quick switch menu"</string>
     <string name="setting_start_on_quick_search_select_text">"If the search bar has text, switching the search engine starts the search immediately"</string>
 
+    <string name="settings_voice_models_title">Voice models</string>
+    <string name="settings_voice_model_speech_title">Speech recognition</string>
+    <string name="settings_voice_model_speech_summary">Streaming Zipformer English int8, sherpa-onnx-streaming-zipformer-en-2023-06-26. Apache-2.0. English only.</string>
+    <string name="settings_voice_model_vad_title">Speech detection</string>
+    <string name="settings_voice_model_vad_summary">Silero VAD. MIT. Language independent. Used to decide when a query starts and ends. Transcription remains English only.</string>
+
     <string name="settings_export_category_title">Export / Import</string>
     <string name="settings_export_title">Export settings</string>
     <string name="settings_export_text">Export app settings and search engines into a file</string>
@@ -94,15 +105,16 @@
 
     <!--About-->
     <string name="activity_about">About</string>
-    <string name="about_description">Show information about the app like licenses and changelog</string>
+    <string name="about_description">Show information about the app and its licenses</string>
     <string name="about_tab_1">Information</string>
     <string name="about_tab_2">Licenses</string>
     <string name="about_tab_3">Changelog</string>
 
     <string name="about_developer">Developer</string>
-    <string name="about_developer_name">Tobias Bielefeld</string>
+    <string name="about_developer_name">Steadfast Engineering and Fabrication</string>
     <string name="about_compiled">Compiled on</string>
     <string name="about_source_code">Source code</string>
+    <string name="about_based_on">Based on Simple Search by Tobias Bielefeld</string>
     <string name="about_license">License</string>
     <string name="about_translations">Translations</string>
     <string name="about_further_contributors">Further contributors</string>
@@ -119,6 +131,8 @@
     <string name="about_gson_title">"gson library"</string>
     <string name="about_jsoup_usage">"Used for parsing websites to get their favicons"</string>
     <string name="about_gson_usage">"Used for serialization and deserialization of objects in the settings export and import functions"</string>
+    <string name="about_sherpa_onnx_title">"sherpa-onnx"</string>
+    <string name="about_sherpa_onnx_usage">"On-device English voice search. Runtime by the sherpa-onnx project; Zipformer weights exported from icefall; speech detection by Silero VAD."</string>
     <string name="settings_toolbar_color">"Toolbar Color"</string>
 
     <!-- languages -->

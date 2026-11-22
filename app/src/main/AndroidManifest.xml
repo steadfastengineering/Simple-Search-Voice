@@ -3,7 +3,8 @@
     package="de.tobiasbielefeld.searchbar">
 
     <!-- for loading favicons in the add-searchengine-dialog -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+        <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"

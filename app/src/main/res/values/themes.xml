@@ -2,6 +2,8 @@
 
     <style name="AppThemeNoActionBarNoDrawer" parent="Base.AppThemeNoActionBar">
         <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <!-- Base application theme -->
@@ -38,8 +40,13 @@
         <item name="switchStyle">@style/CustomSwitchStyle</item>
         <item name="materialSwitchStyle">@style/CustomSwitchStyle</item>
         <item name="android:windowBackground">@color/mainBackground</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="actionOverflowMenuStyle">@style/CustomOverflowMenuStyle</item>
         <item name="textInputStyle">@style/CustomTextInputLayout</item>
+        <item name="colorOnSurface">@color/toolbarText</item>
+        <item name="android:textColorPrimary">@color/toolbarText</item>
+        <item name="android:textColorSecondary">@color/toolbarHint</item>
     </style>
 
 
@@ -88,7 +95,7 @@
         <item name="android:textColor">@color/colorAppBarMenuText</item>
         <item name="checkboxStyle">@style/MyCheckBox</item>
     </style>
-    <style name="AppThemeNoActionBar.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="AppThemeNoActionBar.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Dark" />
 
     <!-- Actionbar customization -->
     <style name="CustomActionbarStyle" parent="@style/AppThemeNoActionBar.AppBarOverlay">

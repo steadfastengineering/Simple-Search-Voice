@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#32408B</color>
-    <color name="colorAccent">#2196F3</color>
+    <color name="colorPrimary">#FF000000</color>
+    <color name="colorAccent">#BDBDBD</color>
     <color name="colorTextLink">@color/colorAccent</color>
     <color name="colorAppBarMenuText">#FFFFFF</color>
-    <color name="colorCardBackground">#353535</color>
-    <color name="colorDialogBackground">#434343</color>
+    <color name="colorCardBackground">#141414</color>
+    <color name="colorDialogBackground">#141414</color>
     <color name="colorSeekbarTick">#FFFFFF</color>
-    <color name="colorDrawerSelected">#3A3A3A</color>
+    <color name="colorDrawerSelected">#1A1A1A</color>
     <color name="shadow_themed">#50FFFFFF</color>
-    <color name="toolbarHint">#8D8D8D</color>
-    <color name="toolbarText">#4F4F4F</color>
-    <color name="mainBackground">#FF141218</color>
+    <color name="toolbarHint">#9A9A9A</color>
+    <color name="toolbarText">#E8E8E8</color>
+    <color name="mainBackground">#FF000000</color>
     <color name="dialog_highlight">#33FFFFFF</color>
 </resources>

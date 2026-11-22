@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Simple Search</string>
+    <string name="app_name" translatable="false">Simple Search Voice</string>
     <string name="menu_settings" translatable="false">@string/activity_settings</string>
     <string name="intent_recreate" translatable="false">intent_recreate</string>
 
@@ -23,12 +23,14 @@
     <string name="pref_key_toolbar_color" translatable="false">pref_key_toolbar_color</string>
     <string name="pref_key_manage_search_engines" translatable="false">pref_key_manage_search_engines</string>
 
-    <string name="about_app_github_link" translatable="false"><a href="https://github.com/TobiasBielefeld/Simple-Search">GitHub</a></string>
+    <string name="about_app_github_link" translatable="false"><a href="https://github.com/steadfastengineering/Simple-Search-Voice">GitHub</a></string>
+    <string name="about_original_github_link" translatable="false"><a href="https://github.com/TobiasBielefeld/Simple-Search">GitHub</a></string>
     <string name="about_app_license_link" translatable="false"><a href="https://www.gnu.org/licenses/gpl.html">GPL 3.0+</a></string>
     <string name="about_material_icons_license" translatable="false"><a href="https://github.com/google/material-design-icons/blob/master/LICENSE">Apache 2.0</a></string>
     <string name="about_android_support_libraries_license" translatable="false"><a href="https://github.com/android/platform_frameworks_support/blob/master/LICENSE.txt">Apache 2.0</a></string>
     <string name="about_jsoup_license" translatable="false"><a href="https://jsoup.org/license">MIT</a></string>
     <string name="about_gson_license" translatable="false"><a href="https://github.com/google/gson/blob/main/LICENSE">Apache 2.0</a></string>
+    <string name="about_sherpa_onnx_license" translatable="false"><a href="https://github.com/k2-fsa/sherpa-onnx/blob/master/LICENSE">Apache 2.0</a></string>
     <string name="about_custom_color_picker_license" translatable="false"><a href="https://github.com/yukuku/ambilwarna/blob/master/LICENSE">Apache 2.0</a></string>
     <string name="contributors_julfers" translatable="false"><a href="https://github.com/julfers">julfers</a></string>
     <string name="contributors_tedkotz" translatable="false"><a href="https://github.com/tedkotz">tedkotz</a></string>

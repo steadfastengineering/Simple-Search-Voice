@@ -19,8 +19,8 @@ import de.tobiasbielefeld.searchbar.databinding.ActivtyAboutBinding;
 public class AboutActivity extends CustomAppCompatActivity {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.about_tab_1, R.string.about_tab_2, R.string.about_tab_3};
-    private static final Fragment[] FRAGMENTS = new Fragment[]{new InformationFragment(), new LicenseFragment(), new ChangeLogFragment()};
+    private static final int[] TAB_TITLES = new int[]{R.string.about_tab_1, R.string.about_tab_2};
+    private static final Fragment[] FRAGMENTS = new Fragment[]{new InformationFragment(), new LicenseFragment()};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

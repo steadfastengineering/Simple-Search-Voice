@@ -18,15 +18,12 @@
 
 package de.tobiasbielefeld.searchbar.classes;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import android.content.Intent;
-import android.widget.RemoteViews;
 
 import de.tobiasbielefeld.searchbar.R;
-import de.tobiasbielefeld.searchbar.ui.MainActivity;
+import de.tobiasbielefeld.searchbar.helper.WidgetRemoteViewsFactory;
 
 /**
  * Starts the app when pressing the widget
@@ -38,12 +35,7 @@ public class CustomWidgetProvider2 extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout2);
-        Intent configIntent = new Intent(context, MainActivity.class);
-
-        PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent,  PendingIntent.FLAG_IMMUTABLE);
-
-        remoteViews.setOnClickPendingIntent(R.id.search_widget, configPendingIntent);
-        appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
+        WidgetRemoteViewsFactory.update(context, appWidgetManager, appWidgetIds,
+                R.layout.widget_layout2, R.id.widget_text, R.id.widget_voice);
     }
 }

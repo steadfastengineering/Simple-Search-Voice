@@ -18,9 +18,11 @@
 
 package de.tobiasbielefeld.searchbar.ui;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -50,6 +52,9 @@ import de.tobiasbielefeld.searchbar.classes.CustomMenuAdapter;
 import de.tobiasbielefeld.searchbar.helper.AfterViewTreeObserved;
 import de.tobiasbielefeld.searchbar.helper.LoadingTaskHelper;
 import de.tobiasbielefeld.searchbar.helper.Records;
+import de.tobiasbielefeld.searchbar.helper.SpeechEngine;
+import de.tobiasbielefeld.searchbar.helper.VoiceSearchController;
+import de.tobiasbielefeld.searchbar.helper.WidgetRemoteViewsFactory;
 import de.tobiasbielefeld.searchbar.models.SearchEngine;
 import de.tobiasbielefeld.searchbar.ui.about.AboutActivity;
 import de.tobiasbielefeld.searchbar.ui.settings.Settings;
@@ -71,6 +76,19 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
     private List<SearchEngine> searchEngines;
     private SearchEngine currentSearchEngine;
     private boolean searchEngineListLoading;
+    private boolean voiceListening;
+    private String pendingVoiceQuery;
+    private ImageView voiceButton;
+    private VoiceSearchController voiceSearch;
+    private final ActivityResultLauncher<String> recordAudioPermission = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            granted -> {
+                if (granted) {
+                    startVoiceSearch();
+                } else {
+                    showToast(getString(R.string.voice_permission_denied), this);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +102,18 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
 
         searchText = findViewById(R.id.editTextSearch);
         clearButton = findViewById(R.id.imageButtonClear);
+        voiceButton = findViewById(R.id.imageButtonVoice);
         searchEngineSelectButton = findViewById(R.id.imageButtonSelectSearchEngines);
+        voiceSearch = new VoiceSearchController(this, new SpeechEngine(this));
+        voiceSearch.preload();
         LinearLayout linearLayoutSelectSearchEngines = findViewById(R.id.linearLayoutSelectSearchEngines);
         imageButtonLoadingSpinner = findViewById(R.id.imageButtonLoadingSpinner);
         systemTopSpacer = findViewById(R.id.system_top_spacer);
 
         searchText.addTextChangedListener(this);
         searchText.setOnEditorActionListener(this);
+        clearButton.setOnClickListener(this);
+        voiceButton.setOnClickListener(this);
         linearLayoutSelectSearchEngines.setOnClickListener(this);
 
         records = new Records(this, findViewById(R.id.record_list_container));
@@ -155,6 +178,8 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
     public void onClick(View v) {
         if (v.getId()==R.id.imageButtonClear) {
             searchText.setText("");
+        } else if (v.getId() == R.id.imageButtonVoice) {
+            onVoiceSearchRequested();
         }
 
         if (v.getId() == R.id.linearLayoutSelectSearchEngines && !searchEngineListLoading) {
@@ -164,11 +189,25 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
     }
 
     @Override
+    protected void onPause() {
+        voiceSearch.stop();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        voiceSearch.release();
+        super.onDestroy();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         searchEngineListLoading = true;
         records.load();
-        focusSearchBar();
+        if (!voiceListening) {
+            focusSearchBar();
+        }
 
         searchEngineSelectButton.setImageBitmap(null);
 
@@ -179,6 +218,7 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
                         currentSearchEngine = getSelectedSearchEngine(searchEngines);
                         setSearchEngineIcon(currentSearchEngine);
                         searchEngineListLoading = false;
+                        submitPendingVoiceQuery();
                     }
         ).execute());
 
@@ -358,5 +398,77 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
                 setSearchText(sharedText);
             }
         }
+
+        if (intent.getBooleanExtra(WidgetRemoteViewsFactory.EXTRA_VOICE, false)) {
+            intent.removeExtra(WidgetRemoteViewsFactory.EXTRA_VOICE);
+            onVoiceSearchRequested();
+        }
+    }
+
+    private void onVoiceSearchRequested() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                == PackageManager.PERMISSION_GRANTED) {
+            startVoiceSearch();
+        } else {
+            recordAudioPermission.launch(Manifest.permission.RECORD_AUDIO);
+        }
+    }
+
+    private void startVoiceSearch() {
+        if (voiceSearch.isRecording()) {
+            voiceSearch.stop();
+            return;
+        }
+
+        hideKeyboard();
+        searchText.clearFocus();
+        voiceSearch.start(new VoiceSearchController.Callback() {
+            @Override
+            public void onListeningStarted() {
+                setVoiceListening(true);
+            }
+
+            @Override
+            public void onTranscript(String text) {
+                setVoiceListening(false);
+                setSearchText(text);
+                submitVoiceQuery();
+            }
+
+            @Override
+            public void onEmpty() {
+                setVoiceListening(false);
+                showToast(getString(R.string.voice_no_speech), MainActivity.this);
+            }
+
+            @Override
+            public void onError() {
+                setVoiceListening(false);
+                showToast(getString(R.string.voice_failed), MainActivity.this);
+            }
+        });
+    }
+
+    private void setVoiceListening(boolean listening) {
+        voiceListening = listening;
+        voiceButton.setAlpha(listening ? 1f : 0.55f);
+        searchText.setHint(listening ? R.string.voice_listening : R.string.search_hint);
+    }
+
+    private void submitVoiceQuery() {
+        if (searchEngineListLoading) {
+            pendingVoiceQuery = getSearchText();
+            return;
+        }
+        pendingVoiceQuery = null;
+        startSearch();
+    }
+
+    private void submitPendingVoiceQuery() {
+        if (pendingVoiceQuery == null) {
+            return;
+        }
+        pendingVoiceQuery = null;
+        startSearch();
     }
 }

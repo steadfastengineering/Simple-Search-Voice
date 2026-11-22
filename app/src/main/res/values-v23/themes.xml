@@ -18,7 +18,11 @@
         <item name="switchStyle">@style/CustomSwitchStyle</item>
         <item name="materialSwitchStyle">@style/CustomSwitchStyle</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:windowBackground">@color/mainBackground</item>
+        <item name="colorOnSurface">@color/toolbarText</item>
+        <item name="android:textColorPrimary">@color/toolbarText</item>
+        <item name="android:textColorSecondary">@color/toolbarHint</item>
         <item name="actionOverflowMenuStyle">@style/CustomOverflowMenuStyle</item>
         <item name="textInputStyle">@style/CustomTextInputLayout</item>
     </style>
