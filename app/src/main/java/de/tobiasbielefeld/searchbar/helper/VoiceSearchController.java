@@ -145,6 +145,18 @@ public class VoiceSearchController {
         }
 
         audioRecord = recorder;
+
+        // The downloaded model is large. Load it before opening the microphone so a failed
+        // or slow load does not run at the same time as recording.
+        try {
+            engine.preload();
+        } catch (RuntimeException | Error exception) {
+            recording.set(false);
+            releaseRecorder();
+            post(callback::onError);
+            return;
+        }
+
         recorder.startRecording();
         post(callback::onListeningStarted);
 
@@ -162,7 +174,7 @@ public class VoiceSearchController {
         try {
             engine.startStream();
             streamStarted = true;
-        } catch (RuntimeException exception) {
+        } catch (RuntimeException | Error exception) {
             recording.set(false);
             releaseRecorder();
             post(callback::onError);
@@ -189,7 +201,7 @@ public class VoiceSearchController {
                 boolean speech;
                 try {
                     speech = engine.isSpeech(window);
-                } catch (RuntimeException exception) {
+                } catch (RuntimeException | Error exception) {
                     recording.set(false);
                     releaseRecorder();
                     engine.finishStream();
@@ -233,7 +245,7 @@ public class VoiceSearchController {
         if (streamStarted) {
             try {
                 text = engine.finishStream();
-            } catch (RuntimeException exception) {
+            } catch (RuntimeException | Error exception) {
                 post(callback::onError);
                 return;
             }

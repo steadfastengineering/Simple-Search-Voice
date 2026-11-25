@@ -56,6 +56,7 @@
     <string name="settings_change_theme">"Change theme"</string>
     <string name="settings_change_theme_dark">"Dark"</string>
     <string name="settings_change_theme_light">"Light"</string>
+    <string name="settings_change_theme_terminal">"Terminal"</string>
     <string name="settings_change_theme_default">"Follow system settings"</string>
     <string name="settings_use_edge_to_edge_display_mode">"Use \"edge-to-edge\" display mode"</string>
 
@@ -85,11 +86,12 @@
     <string name="setting_start_on_quick_search_select_title">"Instant search for quick switch menu"</string>
     <string name="setting_start_on_quick_search_select_text">"If the search bar has text, switching the search engine starts the search immediately"</string>
 
-    <string name="settings_voice_models_title">Voice models</string>
-    <string name="settings_voice_model_speech_title">Speech recognition</string>
-    <string name="settings_voice_model_speech_summary">Streaming Zipformer English int8, sherpa-onnx-streaming-zipformer-en-2023-06-26. Apache-2.0. English only.</string>
-    <string name="settings_voice_model_vad_title">Speech detection</string>
-    <string name="settings_voice_model_vad_summary">Silero VAD. MIT. Language independent. Used to decide when a query starts and ends. Transcription remains English only.</string>
+    <string name="settings_voice_models_title">Dictation</string>
+    <string name="settings_dictation_title">Enable dictation</string>
+    <string name="settings_dictation_summary">Enabling will download the speech models, about 180 MB. English only. Dictation stays on this device.</string>
+    <string name="settings_dictation_downloading">Downloading speech models… %1$d%%</string>
+    <string name="settings_dictation_download_failed">Could not download the speech models</string>
+    <string name="voice_dictation_disabled">Enable dictation in settings to use voice search</string>
 
     <string name="settings_export_category_title">Export / Import</string>
     <string name="settings_export_title">Export settings</string>
@@ -132,7 +134,7 @@
     <string name="about_jsoup_usage">"Used for parsing websites to get their favicons"</string>
     <string name="about_gson_usage">"Used for serialization and deserialization of objects in the settings export and import functions"</string>
     <string name="about_sherpa_onnx_title">"sherpa-onnx"</string>
-    <string name="about_sherpa_onnx_usage">"On-device English voice search. Runtime by the sherpa-onnx project; Zipformer weights exported from icefall; speech detection by Silero VAD."</string>
+    <string name="about_sherpa_onnx_usage">"On-device English dictation. Runtime by the sherpa-onnx project. The GigaSpeech Zipformer and Silero speech detector are downloaded when dictation is enabled."</string>
     <string name="settings_toolbar_color">"Toolbar Color"</string>
 
     <!-- languages -->

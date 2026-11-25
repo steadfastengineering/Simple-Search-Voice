@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+c#!/usr/bin/env bash
 # User-local Android build setup. No sudo, no Android Studio.
 # Installs Temurin JDK 17, Android cmdline-tools/sdkmanager, the SDK packages
 # this repo compiles against, and writes env vars plus local.properties.

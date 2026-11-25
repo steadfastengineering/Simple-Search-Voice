@@ -19,7 +19,6 @@
 package de.tobiasbielefeld.searchbar.helper;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 
 import java.util.Locale;
 
@@ -35,34 +34,36 @@ import com.k2fsa.sherpa.onnx.VadModelConfig;
 /**
  * On-device English transcription with sherpa-onnx's streaming Zipformer.
  *
- * The runtime is the sherpa-onnx Android AAR (Apache-2.0). The weights are the
- * int8 icefall LibriSpeech streaming Zipformer from
- * csukuangfj/sherpa-onnx-streaming-zipformer-en-2023-06-26, also Apache-2.0.
- * They are loaded straight from assets, so they are not copied into filesDir.
+ * The runtime is the sherpa-onnx Android AAR (Apache-2.0). Both the GigaSpeech weights and
+ * Silero VAD are downloaded by {@link SpeechModelStore}. A null asset manager tells the runtime
+ * to read those paths from disk.
  */
 public class SpeechEngine {
 
-    private static final String MODEL_DIR = "sherpa-onnx-streaming-zipformer-en-2023-06-26";
-    private static final String ENCODER = MODEL_DIR + "/encoder-epoch-99-avg-1-chunk-16-left-128.int8.onnx";
-    private static final String DECODER = MODEL_DIR + "/decoder-epoch-99-avg-1-chunk-16-left-128.int8.onnx";
-    private static final String JOINER = MODEL_DIR + "/joiner-epoch-99-avg-1-chunk-16-left-128.int8.onnx";
-    private static final String TOKENS = MODEL_DIR + "/tokens.txt";
-    private static final String VAD_MODEL = "silero_vad.onnx";
     private static final int VAD_WINDOW = 512;
 
-    private final AssetManager assets;
+    private final SpeechModelStore models;
     private OnlineRecognizer recognizer;
     private Vad vad;
     private OnlineStream stream;
+    private volatile boolean loaded;
 
     public SpeechEngine(Context context) {
-        assets = context.getApplicationContext().getAssets();
+        models = new SpeechModelStore(context.getApplicationContext());
     }
 
-    /** Builds both models so the first query does not pay that cost after the user stops. */
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    /** Builds both models so a microphone tap does not pay that cost. */
     public synchronized void preload() {
+        if (loaded) {
+            return;
+        }
         recognizer();
         vad();
+        loaded = true;
     }
 
     public synchronized void startStream() {
@@ -114,6 +115,7 @@ public class SpeechEngine {
 
     public synchronized void release() {
         finishStream();
+        loaded = false;
         if (recognizer != null) {
             recognizer.release();
             recognizer = null;
@@ -127,7 +129,7 @@ public class SpeechEngine {
     private Vad vad() {
         if (vad == null) {
             SileroVadModelConfig silero = new SileroVadModelConfig();
-            silero.setModel(VAD_MODEL);
+            silero.setModel(models.vadFile());
             silero.setThreshold(0.5f);
             silero.setWindowSize(VAD_WINDOW);
             silero.setMinSpeechDuration(0.05f);
@@ -138,31 +140,33 @@ public class SpeechEngine {
             config.setSampleRate(VoiceSearchController.SAMPLE_RATE);
             config.setNumThreads(1);
             config.setProvider("cpu");
-            vad = new Vad(assets, config);
+            vad = new Vad(null, config);
         }
         return vad;
     }
 
     private OnlineRecognizer recognizer() {
-        if (recognizer == null) {
-            OnlineModelConfig modelConfig = new OnlineModelConfig();
-            modelConfig.setTokens(TOKENS);
-            modelConfig.setNumThreads(2);
-            modelConfig.setDebug(false);
-            modelConfig.setProvider("cpu");
-            modelConfig.setModelType("zipformer2");
-
-            OnlineTransducerModelConfig transducer = new OnlineTransducerModelConfig();
-            transducer.setEncoder(ENCODER);
-            transducer.setDecoder(DECODER);
-            transducer.setJoiner(JOINER);
-            modelConfig.setTransducer(transducer);
-
-            OnlineRecognizerConfig config = new OnlineRecognizerConfig();
-            config.setModelConfig(modelConfig);
-            config.setDecodingMethod("greedy_search");
-            recognizer = new OnlineRecognizer(assets, config);
+        if (recognizer != null) {
+            return recognizer;
         }
+
+        OnlineModelConfig modelConfig = new OnlineModelConfig();
+        modelConfig.setTokens(models.modelFile(SpeechModelStore.TOKENS));
+        modelConfig.setNumThreads(2);
+        modelConfig.setDebug(false);
+        modelConfig.setProvider("cpu");
+        modelConfig.setModelType("zipformer2");
+
+        OnlineTransducerModelConfig transducer = new OnlineTransducerModelConfig();
+        transducer.setEncoder(models.modelFile(SpeechModelStore.ENCODER));
+        transducer.setDecoder(models.modelFile(SpeechModelStore.DECODER));
+        transducer.setJoiner(models.modelFile(SpeechModelStore.JOINER));
+        modelConfig.setTransducer(transducer);
+
+        OnlineRecognizerConfig config = new OnlineRecognizerConfig();
+        config.setModelConfig(modelConfig);
+        config.setDecodingMethod("greedy_search");
+        recognizer = new OnlineRecognizer(null, config);
         return recognizer;
     }
 }

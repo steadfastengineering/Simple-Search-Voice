@@ -20,6 +20,8 @@ package de.tobiasbielefeld.searchbar.ui.settings;
 
 import static de.tobiasbielefeld.searchbar.helper.InsetHelper.*;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -28,6 +30,10 @@ import androidx.appcompat.app.ActionBar;
 
 import de.tobiasbielefeld.searchbar.R;
 import de.tobiasbielefeld.searchbar.classes.CustomAppCompatActivity;
+import de.tobiasbielefeld.searchbar.classes.CustomWidgetProvider;
+import de.tobiasbielefeld.searchbar.classes.CustomWidgetProvider2;
+import de.tobiasbielefeld.searchbar.classes.CustomWidgetProvider3;
+import de.tobiasbielefeld.searchbar.helper.WidgetRemoteViewsFactory;
 import de.tobiasbielefeld.searchbar.databinding.ActivitySettingsBinding;
 import de.tobiasbielefeld.searchbar.ui.settings.helpers.CustomPreferenceFragmentCompat;
 
@@ -69,7 +75,22 @@ public class Settings extends CustomAppCompatActivity {
 
     @Override
     public void finish() {
+        refreshWidgets();
         setResult(RESULT_OK, resultIntent);
         super.finish();
+    }
+
+    public void refreshWidgets() {
+        AppWidgetManager manager = AppWidgetManager.getInstance(this);
+        refresh(manager, CustomWidgetProvider.class, R.layout.widget_layout);
+        refresh(manager, CustomWidgetProvider2.class, R.layout.widget_layout2);
+        refresh(manager, CustomWidgetProvider3.class, R.layout.widget_layout3);
+    }
+
+    private void refresh(AppWidgetManager manager, Class<?> provider, int layoutId) {
+        int[] ids = manager.getAppWidgetIds(new ComponentName(this, provider));
+        if (ids.length > 0) {
+            WidgetRemoteViewsFactory.update(this, manager, ids, layoutId, R.id.widget_text, R.id.widget_voice);
+        }
     }
 }

@@ -60,22 +60,20 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppThemeNoActionBar.AppBarOverlay">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppThemeNoActionBar.PopupOverlay">
+                android:background="?attr/colorPrimary">
 
                 <LinearLayout
                     android:id="@+id/linearLayoutSearchText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/widget_background"
+                    android:background="?attr/searchFieldBackground"
                     android:orientation="horizontal"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
@@ -134,8 +132,8 @@
                         android:imeOptions="actionSearch"
                         android:inputType="text"
                         android:singleLine="true"
-                        android:textColor="@color/toolbarText"
-                        android:textColorHint="@color/toolbarHint_new" />
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textColorHint="?android:attr/textColorHint" />
 
                     <ImageView
                         android:id="@+id/imageButtonClear"

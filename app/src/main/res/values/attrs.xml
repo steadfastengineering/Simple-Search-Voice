@@ -2,4 +2,5 @@
 <resources>
     <attr name="colorHint" format="reference" />
     <attr name="colorText" format="reference" />
+    <attr name="searchFieldBackground" format="reference" />
 </resources>

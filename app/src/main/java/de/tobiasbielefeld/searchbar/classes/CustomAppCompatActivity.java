@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -29,6 +31,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import de.tobiasbielefeld.searchbar.R;
 
 import static de.tobiasbielefeld.searchbar.SharedData.*;
 import static de.tobiasbielefeld.searchbar.helper.InsetHelper.applyEdgelessMode;
@@ -51,7 +55,7 @@ public abstract class CustomAppCompatActivity extends AppCompatActivity {
         lastKnownLocale = Locale.getDefault();
 
         lastKnownTheme = getSavedTheme();
-        changeTheme(2);
+        applyTheme(lastKnownTheme);
 
         lastKnownOrientation = getSavedOrientation();
         setOrientation(lastKnownOrientation);
@@ -74,7 +78,8 @@ public abstract class CustomAppCompatActivity extends AppCompatActivity {
         int newTheme = getSavedTheme();
         if (lastKnownTheme != newTheme) {
             lastKnownTheme = newTheme;
-            changeTheme(newTheme);
+            applyTheme(newTheme);
+            recreate();
         }
 
         int newOrientation = getSavedOrientation();
@@ -94,9 +99,22 @@ public abstract class CustomAppCompatActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void changeTheme(int theme) {
-        // Voice builds stay AMOLED black even if the system or a saved setting is light.
-        getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+    public void applyTheme(int theme) {
+        int night = theme == THEME_LIGHT
+                ? AppCompatDelegate.MODE_NIGHT_NO
+                : AppCompatDelegate.MODE_NIGHT_YES;
+        getDelegate().setLocalNightMode(night);
+        setTheme(styleFor(theme));
+    }
+
+    public static int styleFor(int theme) {
+        if (theme == THEME_LIGHT) {
+            return R.style.ThemeLight;
+        }
+        if (theme == THEME_TERMINAL) {
+            return R.style.ThemeTerminal;
+        }
+        return R.style.ThemeDark;
     }
 
     public void setOrientation(int orientation) {
@@ -109,17 +127,46 @@ public abstract class CustomAppCompatActivity extends AppCompatActivity {
     }
 
     public void changeToolbarColor() {
+        int theme = getSavedTheme();
         int savedColor = getSavedToolbarColor();
-        if (savedColor == 0xFF3F51B5 || savedColor == 0xFF32408B) {
-            savedColor = DEFAULT_TOOLBAR_COLOR;
+        if (theme == THEME_TERMINAL) {
+            savedColor = 0xFF000000;
+        } else if (savedColor == 0xFF3F51B5 || savedColor == 0xFF32408B) {
+            savedColor = theme == THEME_LIGHT ? 0xFFF7F7F7 : 0xFF000000;
             putSavedToolbarColor(savedColor);
+        } else if (theme == THEME_LIGHT && savedColor == 0xFF000000) {
+            savedColor = 0xFFF7F7F7;
+        } else if (theme == THEME_DARK && savedColor == 0xFFF7F7F7) {
+            savedColor = 0xFF000000;
         }
 
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(savedColor);
+        window.setNavigationBarColor(theme == THEME_LIGHT ? 0xFFF7F7F7 : 0xFF000000);
         toolbar.setBackgroundColor(savedColor);
         systemTopSpacer.setBackgroundColor(savedColor);
+        if (theme == THEME_TERMINAL) {
+            toolbar.setTitleTextColor(0xFF33FF33);
+        } else if (theme == THEME_LIGHT) {
+            toolbar.setTitleTextColor(0xFF1A1A1A);
+        } else {
+            toolbar.setTitleTextColor(0xFFE8E8E8);
+        }
+        setSystemBarIcons(window, isLightColor(savedColor), theme == THEME_LIGHT);
+    }
+
+    private static void setSystemBarIcons(Window window, boolean lightStatus, boolean lightNavigation) {
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
+        controller.setAppearanceLightStatusBars(lightStatus);
+        controller.setAppearanceLightNavigationBars(lightNavigation);
+    }
+
+    private static boolean isLightColor(int color) {
+        int red = (color >> 16) & 0xFF;
+        int green = (color >> 8) & 0xFF;
+        int blue = color & 0xFF;
+        return (red * 299 + green * 587 + blue * 114) / 1000 > 160;
     }
 }

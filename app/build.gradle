@@ -24,8 +24,6 @@ android {
 
     androidResources {
         generateLocaleConfig true
-        // The recognizer reads ONNX weights from assets. Compressing them corrupts the load.
-        noCompress 'onnx'
     }
 
     buildTypes {

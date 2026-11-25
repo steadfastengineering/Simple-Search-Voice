@@ -18,6 +18,7 @@
 
 package de.tobiasbielefeld.searchbar.ui.settings;
 
+import static de.tobiasbielefeld.searchbar.SharedData.putSavedTheme;
 import static de.tobiasbielefeld.searchbar.SharedData.showOrHideStatusBar;
 import static de.tobiasbielefeld.searchbar.SharedData.showToast;
 
@@ -31,6 +32,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,10 +40,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.tobiasbielefeld.searchbar.R;
 import de.tobiasbielefeld.searchbar.classes.CustomAppCompatActivity;
 import de.tobiasbielefeld.searchbar.helper.SettingsImportExport;
+import de.tobiasbielefeld.searchbar.helper.SpeechModelStore;
 import de.tobiasbielefeld.searchbar.manageSearchEngines.DialogManageSearchEngines;
 import de.tobiasbielefeld.searchbar.dialogs.DialogShowSearchEngines;
 import de.tobiasbielefeld.searchbar.dialogs.DialogLanguage;
@@ -53,6 +58,10 @@ import de.tobiasbielefeld.searchbar.ui.settings.helpers.CustomPreferenceFragment
 public class FragmentSettings extends CustomPreferenceFragmentCompat {
 
     private ActivityResultLauncher<Intent> exportLauncher, importLauncher;
+    private final ExecutorService modelExecutor = Executors.newSingleThreadExecutor();
+    private SpeechModelStore speechModels;
+    private boolean modelDownloadRunning;
+    private SwitchPreferenceCompat dictation;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -72,6 +81,14 @@ public class FragmentSettings extends CustomPreferenceFragmentCompat {
 
         Preference exportSettings = findPreference(getString(R.string.pref_key_export_settings));
         Preference importSettings = findPreference(getString(R.string.pref_key_import_settings));
+        speechModels = new SpeechModelStore(requireContext());
+        dictation = findPreference(SpeechModelStore.PREF_DICTATION);
+        assert dictation != null;
+        dictation.setChecked(speechModels.isEnabled());
+        dictation.setOnPreferenceChangeListener((preference, newValue) -> {
+            onDictationChanged((Boolean) newValue);
+            return false;
+        });
 
         bindDialog(searchEngines, DialogSelectedSearchEngine.class);
         bindDialog(language, DialogLanguage.class);
@@ -91,6 +108,10 @@ public class FragmentSettings extends CustomPreferenceFragmentCompat {
 
         assert theme != null;
         theme.setOnPreferenceChangeListener((Preference pref, Object newValue) -> {
+            putSavedTheme(Integer.parseInt((String) newValue));
+            if (requireActivity() instanceof Settings settings) {
+                settings.refreshWidgets();
+            }
             requireActivity().recreate();
             return true;
         });
@@ -146,6 +167,60 @@ public class FragmentSettings extends CustomPreferenceFragmentCompat {
         });
     }
 
+
+    private void onDictationChanged(boolean enabled) {
+        if (modelDownloadRunning || dictation == null) {
+            return;
+        }
+        if (!enabled) {
+            speechModels.setEnabled(false);
+            speechModels.delete();
+            dictation.setChecked(false);
+            dictation.setSummary(R.string.settings_dictation_summary);
+            return;
+        }
+        if (speechModels.isReady()) {
+            speechModels.setEnabled(true);
+            dictation.setChecked(true);
+            return;
+        }
+
+        modelDownloadRunning = true;
+        dictation.setEnabled(false);
+        modelExecutor.execute(() -> {
+            try {
+                speechModels.download(percent -> {
+                    if (!isAdded()) {
+                        return;
+                    }
+                    requireActivity().runOnUiThread(() ->
+                            dictation.setSummary(getString(R.string.settings_dictation_downloading, percent)));
+                });
+                speechModels.setEnabled(true);
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(() -> {
+                        dictation.setChecked(true);
+                        dictation.setSummary(R.string.settings_dictation_summary);
+                    });
+                }
+            } catch (IOException exception) {
+                speechModels.setEnabled(false);
+                speechModels.delete();
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(() -> {
+                        dictation.setChecked(false);
+                        dictation.setSummary(R.string.settings_dictation_summary);
+                        showToast(getString(R.string.settings_dictation_download_failed), requireContext());
+                    });
+                }
+            } finally {
+                modelDownloadRunning = false;
+                if (isAdded()) {
+                    requireActivity().runOnUiThread(() -> dictation.setEnabled(true));
+                }
+            }
+        });
+    }
 
     private void startExport() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);

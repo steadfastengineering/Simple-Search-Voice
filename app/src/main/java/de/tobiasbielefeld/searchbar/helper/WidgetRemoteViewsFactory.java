@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.widget.RemoteViews;
 
+import de.tobiasbielefeld.searchbar.R;
+import de.tobiasbielefeld.searchbar.SharedData;
 import de.tobiasbielefeld.searchbar.ui.MainActivity;
 
 /**
@@ -57,7 +59,29 @@ public final class WidgetRemoteViewsFactory {
         }
         remoteViews.setOnClickPendingIntent(voiceId,
                 PendingIntent.getActivity(context, REQUEST_VOICE, voiceIntent, flags));
+        remoteViews.setViewVisibility(voiceId,
+                new SpeechModelStore(context).isEnabled() ? android.view.View.VISIBLE : android.view.View.GONE);
+        applyTheme(context, remoteViews, layoutId, textId, voiceId);
 
         manager.updateAppWidget(appWidgetIds, remoteViews);
+    }
+
+    private static void applyTheme(Context context, RemoteViews remoteViews, int layoutId, int textId, int voiceId) {
+        SharedData.reinitializeData(context);
+        int theme = SharedData.getSavedTheme();
+        int textColor = 0xFFE8E8E8;
+        int background = R.drawable.search_field_dark;
+        if (theme == SharedData.THEME_LIGHT) {
+            textColor = 0xFF1A1A1A;
+            background = R.drawable.search_field_light;
+        } else if (theme == SharedData.THEME_TERMINAL) {
+            textColor = 0xFF33FF33;
+            background = R.drawable.search_field_terminal;
+        }
+        remoteViews.setTextColor(textId, textColor);
+        remoteViews.setInt(voiceId, "setColorFilter", textColor);
+        if (layoutId != R.layout.widget_layout2) {
+            remoteViews.setInt(R.id.search_widget, "setBackgroundResource", background);
+        }
     }
 }

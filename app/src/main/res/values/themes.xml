@@ -42,6 +42,7 @@
         <item name="android:windowBackground">@color/mainBackground</item>
         <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="searchFieldBackground">@drawable/search_field_dark</item>
         <item name="actionOverflowMenuStyle">@style/CustomOverflowMenuStyle</item>
         <item name="textInputStyle">@style/CustomTextInputLayout</item>
         <item name="colorOnSurface">@color/toolbarText</item>
@@ -113,8 +114,110 @@
     </style>
 
     <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/colorAccent</item>
-        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="boxStrokeColor">?attr/colorAccent</item>
+        <item name="hintTextColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="ThemeLight" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/theme_light_background</item>
+        <item name="colorPrimaryDark">@color/theme_light_background</item>
+        <item name="colorAccent">@color/theme_light_accent</item>
+        <item name="colorOnSurface">@color/theme_light_text</item>
+        <item name="colorSurface">@android:color/white</item>
+        <item name="colorControlNormal">@color/theme_light_text</item>
+        <item name="android:textColorPrimary">@color/theme_light_text</item>
+        <item name="android:textColorSecondary">@color/theme_light_hint</item>
+        <item name="android:textColorHint">@color/theme_light_hint</item>
+        <item name="android:windowBackground">@color/theme_light_background</item>
+        <item name="android:statusBarColor">@color/theme_light_background</item>
+        <item name="android:navigationBarColor">@color/theme_light_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="searchFieldBackground">@drawable/search_field_light</item>
+        <item name="materialButtonStyle">@style/CustomMaterialButton</item>
+        <item name="alertDialogTheme">@style/CustomMaterialAlertDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/CustomMaterialAlertDialogTheme</item>
+        <item name="popupMenuStyle">@style/CustomPopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/CustomOverflowMenuStyle</item>
+        <item name="switchStyle">@style/CustomSwitchStyle</item>
+        <item name="materialSwitchStyle">@style/CustomSwitchStyle</item>
+    </style>
+
+    <style name="ThemeDark" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/terminal_black</item>
+        <item name="colorPrimaryDark">@color/terminal_black</item>
+        <item name="colorAccent">@color/theme_dark_accent</item>
+        <item name="colorOnSurface">@color/theme_dark_text</item>
+        <item name="colorSurface">@color/theme_dark_card</item>
+        <item name="colorControlNormal">@color/theme_dark_text</item>
+        <item name="android:textColorPrimary">@color/theme_dark_text</item>
+        <item name="android:textColorSecondary">@color/theme_dark_hint</item>
+        <item name="android:textColorHint">@color/theme_dark_hint</item>
+        <item name="android:windowBackground">@color/terminal_black</item>
+        <item name="android:statusBarColor">@color/terminal_black</item>
+        <item name="android:navigationBarColor">@color/terminal_black</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="searchFieldBackground">@drawable/search_field_dark</item>
+        <item name="materialButtonStyle">@style/CustomMaterialButton</item>
+        <item name="alertDialogTheme">@style/CustomMaterialAlertDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/CustomMaterialAlertDialogTheme</item>
+        <item name="popupMenuStyle">@style/CustomPopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/CustomOverflowMenuStyle</item>
+        <item name="switchStyle">@style/CustomSwitchStyle</item>
+        <item name="materialSwitchStyle">@style/CustomSwitchStyle</item>
+    </style>
+
+    <style name="ThemeTerminal" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/terminal_black</item>
+        <item name="colorPrimaryDark">@color/terminal_black</item>
+        <item name="colorAccent">@color/terminal_green</item>
+        <item name="colorOnSurface">@color/terminal_green</item>
+        <item name="colorOnSurfaceVariant">@color/terminal_dim</item>
+        <item name="colorSurface">@color/terminal_black</item>
+        <item name="colorControlNormal">@color/terminal_green</item>
+        <item name="android:textColorPrimary">@color/terminal_green</item>
+        <item name="android:textColorSecondary">@color/terminal_dim</item>
+        <item name="android:textColorHint">@color/terminal_dim</item>
+        <item name="android:textColorLink">@color/terminal_green</item>
+        <item name="android:windowBackground">@color/terminal_black</item>
+        <item name="android:statusBarColor">@color/terminal_black</item>
+        <item name="android:navigationBarColor">@color/terminal_black</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="fontFamily">monospace</item>
+        <item name="searchFieldBackground">@drawable/search_field_terminal</item>
+        <item name="materialButtonStyle">@style/TerminalButton</item>
+        <item name="alertDialogTheme">@style/TerminalDialog</item>
+        <item name="android:alertDialogTheme">@style/TerminalDialog</item>
+        <item name="materialAlertDialogTheme">@style/TerminalDialog</item>
+        <item name="popupMenuStyle">@style/TerminalPopup</item>
+        <item name="actionOverflowMenuStyle">@style/TerminalPopup</item>
+        <item name="switchStyle">@style/TerminalSwitch</item>
+        <item name="materialSwitchStyle">@style/TerminalSwitch</item>
+    </style>
+
+    <style name="TerminalButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/terminal_green</item>
+        <item name="android:textColor">@color/terminal_black</item>
+    </style>
+
+    <style name="TerminalDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/terminal_green</item>
+        <item name="colorOnSurface">@color/terminal_green</item>
+        <item name="android:background">@color/terminal_black</item>
+        <item name="android:textColorPrimary">@color/terminal_green</item>
+        <item name="android:fontFamily">monospace</item>
+    </style>
+
+    <style name="TerminalPopup" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@color/terminal_black</item>
+        <item name="android:textColor">@color/terminal_green</item>
+    </style>
+
+    <style name="TerminalSwitch" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorPrimary">@color/terminal_green</item>
     </style>
 
 </resources>

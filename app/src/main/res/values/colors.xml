@@ -4,10 +4,10 @@
     <color name="nearlyWhite">#f5f5f5</color>
     <color name="black">#ff000000</color>
     <color name="blueBackground">#3f83ff</color>
-    <color name="mainBackground">#FF000000</color>
-    <color name="toolbarHint">#9A9A9A</color>
-    <color name="toolbarHint_new">#9A9A9A</color>
-    <color name="toolbarText">#E8E8E8</color>
+    <color name="mainBackground">#FFF7F7F7</color>
+    <color name="toolbarHint">#6F6F6F</color>
+    <color name="toolbarHint_new">#6F6F6F</color>
+    <color name="toolbarText">#1A1A1A</color>
     <color name="dialog_highlight">#39000000</color>
     <color name="loading_background">#50000000</color>
 
@@ -21,15 +21,15 @@
 
     <color name="colorDrawerSelected">#E1E1E1</color>
     <color name="white">#ffffff</color>
-    <color name="colorCardBackground">#141414</color>
-    <color name="colorDialogBackground">#141414</color>
+    <color name="colorCardBackground">#FFFFFF</color>
+    <color name="colorDialogBackground">#FFFFFF</color>
     <color name="black_overlay">#66000000</color>
 
-    <color name="colorPrimary">#FF000000</color>
-    <color name="colorAccent">#BDBDBD</color>
-    <color name="colorTextLink">#BDBDBD</color>
-    <color name="colorAppBarMenuText">#FFFFFF</color>
-    <color name="colorSeekbarTick">#FFFFFF</color>
+    <color name="colorPrimary">#FFF7F7F7</color>
+    <color name="colorAccent">#1565C0</color>
+    <color name="colorTextLink">#1565C0</color>
+    <color name="colorAppBarMenuText">#1A1A1A</color>
+    <color name="colorSeekbarTick">#1A1A1A</color>
     <color name="shadow_themed">#40000000</color>
 
     <color name="settings_dialog_highlight">#55000000</color>
@@ -54,5 +54,18 @@
     <color name="settings_color_brown">#795548</color>
     <color name="settings_color_grey">#9E9E9E</color>
     <color name="settings_color_blue_grey">#607D8B</color>
+
+    <color name="theme_light_background">#F7F7F7</color>
+    <color name="theme_light_text">#1A1A1A</color>
+    <color name="theme_light_hint">#6F6F6F</color>
+    <color name="theme_light_accent">#1565C0</color>
+    <color name="theme_dark_text">#E8E8E8</color>
+    <color name="theme_dark_hint">#9A9A9A</color>
+    <color name="theme_dark_accent">#BDBDBD</color>
+    <color name="theme_dark_card">#141414</color>
+    <color name="theme_dark_field">#1A1A1A</color>
+    <color name="terminal_green">#33FF33</color>
+    <color name="terminal_dim">#1B7A1B</color>
+    <color name="terminal_black">#FF000000</color>
 
 </resources>

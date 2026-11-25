@@ -52,6 +52,10 @@ import de.tobiasbielefeld.searchbar.models.SearchEngine;
 
 public class SharedData {
 
+    public static final int THEME_DARK = 0;
+    public static final int THEME_LIGHT = 1;
+    public static final int THEME_TERMINAL = 2;
+
     public static Database database;
     public static SharedPreferences sharedPref;
     public static String PREF_RECORD_LIST_SIZE;

@@ -25,5 +25,6 @@
         <item name="android:textColorSecondary">@color/toolbarHint</item>
         <item name="actionOverflowMenuStyle">@style/CustomOverflowMenuStyle</item>
         <item name="textInputStyle">@style/CustomTextInputLayout</item>
+        <item name="searchFieldBackground">@drawable/search_field_dark</item>
     </style>
 </resources>

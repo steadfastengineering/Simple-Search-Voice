@@ -53,6 +53,7 @@ import de.tobiasbielefeld.searchbar.helper.AfterViewTreeObserved;
 import de.tobiasbielefeld.searchbar.helper.LoadingTaskHelper;
 import de.tobiasbielefeld.searchbar.helper.Records;
 import de.tobiasbielefeld.searchbar.helper.SpeechEngine;
+import de.tobiasbielefeld.searchbar.helper.SpeechModelStore;
 import de.tobiasbielefeld.searchbar.helper.VoiceSearchController;
 import de.tobiasbielefeld.searchbar.helper.WidgetRemoteViewsFactory;
 import de.tobiasbielefeld.searchbar.models.SearchEngine;
@@ -77,6 +78,7 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
     private SearchEngine currentSearchEngine;
     private boolean searchEngineListLoading;
     private boolean voiceListening;
+    private boolean voiceRequested;
     private String pendingVoiceQuery;
     private ImageView voiceButton;
     private VoiceSearchController voiceSearch;
@@ -105,7 +107,6 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
         voiceButton = findViewById(R.id.imageButtonVoice);
         searchEngineSelectButton = findViewById(R.id.imageButtonSelectSearchEngines);
         voiceSearch = new VoiceSearchController(this, new SpeechEngine(this));
-        voiceSearch.preload();
         LinearLayout linearLayoutSelectSearchEngines = findViewById(R.id.linearLayoutSelectSearchEngines);
         imageButtonLoadingSpinner = findViewById(R.id.imageButtonLoadingSpinner);
         systemTopSpacer = findViewById(R.id.system_top_spacer);
@@ -114,6 +115,7 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
         searchText.setOnEditorActionListener(this);
         clearButton.setOnClickListener(this);
         voiceButton.setOnClickListener(this);
+        voiceButton.setVisibility(new SpeechModelStore(this).isEnabled() ? View.VISIBLE : View.GONE);
         linearLayoutSelectSearchEngines.setOnClickListener(this);
 
         records = new Records(this, findViewById(R.id.record_list_container));
@@ -205,6 +207,7 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
         super.onResume();
         searchEngineListLoading = true;
         records.load();
+        voiceButton.setVisibility(new SpeechModelStore(this).isEnabled() ? View.VISIBLE : View.GONE);
         if (!voiceListening) {
             focusSearchBar();
         }
@@ -401,11 +404,30 @@ public class MainActivity extends CustomAppCompatActivity implements TextWatcher
 
         if (intent.getBooleanExtra(WidgetRemoteViewsFactory.EXTRA_VOICE, false)) {
             intent.removeExtra(WidgetRemoteViewsFactory.EXTRA_VOICE);
+            // A widget starts this activity from the background. The permission request
+            // cannot run until the activity is resumed, or Android kills the process.
+            voiceRequested = true;
+            if (hasWindowFocus()) {
+                onVoiceSearchRequested();
+            }
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus && voiceRequested) {
             onVoiceSearchRequested();
         }
     }
 
     private void onVoiceSearchRequested() {
+        voiceRequested = false;
+        if (!new SpeechModelStore(this).isEnabled()) {
+            showToast(getString(R.string.voice_dictation_disabled), this);
+            startActivity(new Intent(this, Settings.class));
+            return;
+        }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED) {
             startVoiceSearch();
